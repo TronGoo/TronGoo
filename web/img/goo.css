@@ -1,0 +1,545 @@
+html {
+	height: 100%;
+}
+
+body {
+	font-size: 14px;
+	font-family: "Press Start 2P", cursive;
+	position:absolute;
+	min-width:100%;
+	min-height:100%;
+	line-height: 1.3;
+	margin: 0;
+	padding: 0;
+
+
+	background: #CBF0FF;
+	overflow: hidden;
+}
+
+
+
+table{
+	transform: rotateX(60deg) rotateZ(45deg);
+	position: absolute;
+    border-spacing: 0px;
+}
+tr{
+    height: 0px;
+    width: 0px;
+    display: block;
+}
+td{
+    height: 0px;
+    width: 0px;
+    display: block;
+	padding: 0px;
+}
+.tile{
+	transform: translate3d(0em, 0em, 0em);
+	width: 6em;
+	height: 6em;
+
+	transition: all 0.8s cubic-bezier(0.22, 0.6, 0.39, 1.42);
+	box-shadow: 32px 32px 14px 1px rgba(0, 0, 0, 0.5);
+}
+.tile.hide{
+	transform: translate3d(12em, 12em, 0em) !important;
+	opacity: 0;
+}
+.tile.raise{
+	transform: translate3d(-0.5em, -0.5em, 0em) !important;
+	transition: all 0.3s;
+}
+.tile>div{
+	transform:
+		rotateZ(-45deg) rotateY(-60deg)
+		translate3d(-2em, -8.2em, 0em);
+
+	width: 17.25em;
+	height: 15em;
+	pointer-events: none;
+
+    background-size: 1600% 100%;
+	background-position: -4px 0;
+    background-repeat: no-repeat;
+	background-image: url(tiles.png);
+    image-rendering: pixelated;
+}
+
+.tile-5>.building {
+	width: 20%;
+	height: 20%;
+	pointer-events: none;
+
+	position: absolute;
+    top: 30%;
+    left: 35%;
+
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url(businessdoge.png);
+	image-rendering: pixelated;
+}
+
+
+.tile>div.tile-0{
+    background-position: calc(-1px + (-275.5px * 0)) 0px;
+}
+.tile>div.tile-1{
+    background-position: calc(-4px + (-275.5px * 1)) 0px;
+}
+.tile>div.tile-2{
+	background-position: calc(-4px + (-275.5px * 2)) 0px;
+}
+.tile>div.tile-3{
+	background-position: calc(-4px + (-275.5px * 3)) 0px;
+}
+.tile>div.tile-4{
+	background-position: calc(-4px + (-275.5px * 4)) 0px;
+}
+.tile>div.tile-5{
+	background-position: calc(-4px + (-275.5px * 5)) 0px;
+}
+.tile>div.tile-6{
+	background-position: calc(-4px + (-275.5px * 6)) 0px;
+}
+.tile>div.tile-7{
+	background-position: calc(-4px + (-275.5px * 7)) 0px;
+}
+.tile>div.tile-8{
+	background-position: calc(-4px + (-275.5px * 8)) 0px;
+}
+.tile>div.tile-9{
+	background-position: calc(-4px + (-275.5px * 9)) 0px;
+}
+.tile>div.tile-10{
+	background-position: calc(-4px + (-275.5px * 10)) 0px;
+}
+.tile>div.tile-11{
+	background-position: calc(-4px + (-275.5px * 11)) 0px;
+}
+.tile>div.tile-12{
+	background-position: calc(-4px + (-275.5px * 12)) 0px;
+}
+.tile>div.tile-13{
+	background-position: calc(-4px + (-275.5px * 13)) 0px;
+}
+.tile>div.tile-14{
+	background-position: calc(-4px + (-275.5px * 14)) 0px;
+}
+.tile>div.tile-15{
+	background-position: calc(-4px + (-275.5px * 15)) 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+p {
+	line-height: 0.95;
+}
+
+.pixelBox {
+  box-shadow:
+    5px 0 #ffffff,
+    -5px 0 #ffffff,
+    0 -5px #ffffff,
+    0 5px #ffffff,
+    10px 0 #000000,
+    -10px 0 #000000,
+    0 -10px #000000,
+    0 10px #000000,
+    0 0 0 6px #000000;
+  margin: 18px 0 0 18px;
+  text-align: center;
+  padding-top: 8px;
+  padding-left: 5px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  position: relative;
+}
+
+
+.numberButton {
+	background: #ffffff;
+	padding-left: 4px;
+	padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: black;
+	box-shadow: inset -2px -2px 0px 0px #aaaaaa;
+	z-index: 2;
+}
+
+.unactiveNumber:hover, .unactiveNumber:focus {
+  background: #cccccc;
+  box-shadow: inset -2px -2px 0px 0px #aaaaaa;
+}
+
+.numberButton:active, .activeNumber {
+  background: #cccccc;
+  box-shadow: inset 2px 2px 0px 0px #999999;
+}
+
+.disabledNumberButton {
+	background: #ffffff;
+	padding-left: 4px;
+	padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: #d4d4d4;
+}
+
+.disabledNumberButton:before {
+  top: -3px;
+  left: 0;
+  border-top: 3px #eaeaea solid;
+  border-bottom: 3px #eaeaea solid;
+}
+
+.disabledNumberButton:after {
+  left: -3px;
+  top: 0;
+  border-left: 3px #eaeaea solid;
+  border-right: 3px #eaeaea solid;
+}
+
+
+
+.buyButton {
+	background: #92cd41;
+	padding-left: 1px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: white;
+	width: 70px;
+	box-shadow: inset -2px -2px 0px 0px #4aa52e;
+	margin-left: 14px;
+	z-index: 2;
+}
+
+.buyButton:hover, .buyButton:focus {
+  background: #76c442;
+  box-shadow: inset -2px -2px 0px 0px #4aa52e;
+}
+
+.buyButton:active {
+  box-shadow: inset 2px 2px 0px 0px #4aa52e;
+}
+
+.buyButtonDisabled {
+	background: rgba(146, 205, 65, 0.7);
+	padding-left: 1px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: white;
+	width: 70px;
+	margin-left: 14px;
+}
+
+.buyButtonDisabled:before {
+  top: -3px;
+  left: 0;
+  border-top: 3px #7f8a71 solid;
+  border-bottom: 3px #7f8a71 solid;
+}
+
+.buyButtonDisabled:after {
+  left: -3px;
+  top: 0;
+  border-left: 3px #7f8a71 solid;
+  border-right: 3px #7f8a71 solid;
+}
+
+
+
+.sellButton {
+	background: #e76e55;
+	padding-left: 1px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: white;
+	width: 70px;
+	box-shadow: inset -2px -2px 0px 0px #8c2022;
+	margin-left: 14px;
+	z-index: 2;
+}
+
+.sellButton:hover, .sellButton:focus {
+  background: #ce372b;
+  box-shadow: inset -2px -2px 0px 0px #8c2022;
+}
+
+.sellButton:active {
+  box-shadow: inset 2px 2px 0px 0px #8c2022;
+}
+
+.sellButtonDisabled {
+	background: rgba(231, 110, 85, 0.7);
+	padding-left: 1px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+	color: white;
+	width: 70px;
+	margin-left: 14px;
+}
+
+.sellButtonDisabled:before {
+  top: -3px;
+  left: 0;
+  border-top: 3px #967270 solid;
+  border-bottom: 3px #967270 solid;
+}
+
+.sellButtonDisabled:after {
+  left: -3px;
+  top: 0;
+  border-left: 3px #967270 solid;
+  border-right: 3px #967270 solid;
+}
+
+
+
+
+.deposit {
+	font-size: 14px;
+	text-decoration: none;
+	border: 0;
+	font-family: "Press Start 2P", cursive;
+	text-align: right;
+	border-radius: 0;
+	border: 1px solid rgba(132,156,177,.56);
+	background: 0 0;
+	background-image: none;
+	width: 120px;
+	padding-top: 3px;
+	padding-right: 2px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+}
+
+.eightBit {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.eightBit:before, .eightBit:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+}
+
+.eightBit:before {
+  top: -3px;
+  left: 0;
+  border-top: 3px black solid;
+  border-bottom: 3px black solid;
+}
+
+.eightBit:after {
+  left: -3px;
+  top: 0;
+  border-left: 3px black solid;
+  border-right: 3px black solid;
+}
+
+
+.eightBitDisabled {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.eightBitDisabled:before, .eightBitDisabled:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+}
+
+.singleUpgrade {
+	margin-left: 6px;
+	width: 304px;
+}
+
+.upgradeDisabled {
+	opacity: 0.25;
+	filter: alpha(opacity=25);
+}
+
+.col-container {
+    display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */
+}
+
+.sidebar {
+	display: table; /* Make the container element behave like a table */
+	width: 600px;
+	border-left: 1px dotted #aaa;
+	margin-right: -1.2em;
+}
+
+.sidebarOverflow {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: calc(100vh - 114px);
+}
+
+.sidebarHeader {
+	width: 600px;
+	border-left: 1px dotted #aaa;
+	border-bottom: 1px dotted #aaa;
+	padding-top: 16px;
+	height: 37px;
+}
+
+.barracks {
+	border-left: 1px dotted #aaa;
+	border-top: 1px dotted #aaa;
+	height: 40px;
+	padding-top: 17px;
+}
+
+.content {
+	width: 100%;
+}
+
+.gameInfo {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: calc(100vh - 326px);
+	margin-top: -54px;
+}
+
+.gameFooter {
+	border-top: 1px dotted #aaa;
+	height: 324px;
+}
+
+.unitBox {
+	width: 258px;
+	min-width: 258px;
+}
+
+.raffleBox {
+	width: 262px;
+	min-width: 262px;
+}
+
+.col {
+    display: table-cell; /* Make elements inside the container behave like table cells */
+	vertical-align: top;
+}
+
+.row {
+	display: table-row;
+}
+
+@media only screen {
+
+}
+
+@media only screen and (min-width: 34em) {
+
+}
+
+@media only screen and (min-width: 54em) {
+
+}
+
+@media only screen and (min-width: 76em) {
+
+}

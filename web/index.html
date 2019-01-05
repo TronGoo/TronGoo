@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en" style="height:100%; min-height:100%;">
+    <head>
+        <title>TronGoo</title>
+        <!-- General meta -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="TronGoo: The Ultimate Blockchain Idle Game" />
+        <meta name="image" content="https://trongoo.io/img/og.png">
+        <!-- Open Graph meta -->
+        <meta property="og:url" content="https://trongoo.io/"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="TronGoo"/>
+        <meta property="og:description" content="TronGoo: The Ultimate Blockchain Idle Game"/>
+        <meta property="og:image" content="https://trongoo.io/img/og.png"/>
+        <!-- Twitter meta -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="https://trongoo.io/">
+        <meta name="twitter:title" content="TronGoo">
+        <meta name="twitter:description" content="TronGoo: The Ultimate Blockchain Idle Game">
+        <meta name="twitter:image" content="https://trongoo.io/img/og.png">
+        <!-- JS Libs -->
+        <script src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
+        <script src="https://bootswatch.com/_vendor/popper.js/dist/umd/popper.min.js"></script>
+        <script src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="https://www.jsviews.com/download/jsviews.min.js"></script>
+        <!-- Core JS -->
+        <script src="js/param_tools.js"></script>
+		<script src="js/battlelog_schema.js"></script>
+        <script src="js/unit_schema.js"></script>
+		<script src="js/item_schema.js"></script>
+        <script src="js/leaderboard_schema.js"></script>
+        <script src="js/tronWeb_generic.js"></script>
+        <script src="js/tronWeb_interface.js"></script>
+        <script src="js/tronWeb_main.js"></script>
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link href="css/custom.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    </head>
+    <body style="height:100%; width:100%; min-height:100%; position:fixed; -webkit-overflow-scrolling: touch;">
+        <div class="container-fluid" style="height:100%; min-height:100%; padding:0px;">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary" style="margin-top:-57px; padding:0px; position:fixed; transform:translateZ(0); -webkit-transform:translateZ(0); z-index:1; width:100%;">
+                <!--<a class="navbar-brand goo" href="#">TronGoo</a>-->
+                <a class="navbar-brand" href="#"><img class="navbar-left" src="img/logo2.png" style="height: 23px; margin-top:2px; margin-bottom:2px;"></img></a>
+                <button class="navbar-toggler" type="button" style="margin-right:0.5rem; margin-top:1px;" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item d-block d-lg-block d-xl-none" id="home" onClick="changeTab('#home')">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item" id="production" onClick="changeTab('#production')">
+                            <a class="nav-link" href="#production">Production</a>
+                        </li>
+                        <li class="nav-item" id="barracks" onClick="changeTab('#barracks')">
+                            <a class="nav-link" href="#barracks">Barracks</a>
+                        </li>
+                        <li class="nav-item" id="battle" onClick="changeTab('#battle')">
+                            <a class="nav-link" href="#battle">Battle</a>
+                        </li>
+                        <li class="nav-item" id="itemShop" onClick="changeTab('#itemShop')">
+                            <a class="nav-link" href="#itemShop">Item Shop</a>
+                        </li>
+                        <li class="nav-item" id="referrals" onClick="changeTab('#referrals')">
+                            <a class="nav-link" href="#referrals">Referrals</a>
+                        </li>
+                    </ul>
+					<ul class="navbar-nav">
+						<li class="nav-item" id="tutorial" data-toggle="modal" data-target="#tutorialModal">
+							<a class="nav-link text-info" style="cursor:pointer;">Tutorial</a>
+						</li>
+						<!--<li class="nav-item" id="info" data-toggle="modal" data-target="#infoModal">
+							<a class="nav-link gold" style="cursor:pointer;">Info</a>
+						</li>-->
+						<a class="nav-link" target="_blank" href="https://discord.gg/ajsz8tn" style="padding:10px;"><img class="navbar-left" src="img/discord.png" style="max-height: 32px;"></img></a>
+					</ul>
+                </div>
+            </nav>
+			
+			<div class="row" style="padding:0px; margin:0px; margin-top:57px; margin-bottom:0px; height:100%; width:100%;">
+				<div class="col d-none d-xl-block" id="leftCol" style="margin-bottom:0px; padding:0px; margin-bottom:110px;">
+					<div id="homePage" style="margin-top:0px; width:100%; height:100%; margin-bottom:30px; overflow-x:hidden; overflow-y:auto; position:absolute;">
+						<div class="text-center" style="width:100%;"><div class="text-center" style="display: -webkit-inline-box; margin-top:20px;">
+							<img src="img/goobig.png" style="height:3.5vw; margin-top:0.6vw; vertical-align:top;" id="image_goo"></img>
+							<div><h4 style="margin-bottom:0px; margin-left:1vw; font-size:4vw; max-font-size:10px;" id="text_globalProduction">Global Goo Production: <br id="br1" /><span id="num_globalProduction">?</span> Goo/s</h4></div>
+						</div></div>
+						<div class="text-center" style="width:100%; margin-top:1vw;"><div class="text-center" style="display: -webkit-inline-box;">
+							<img src="img/chest.png" style="height:3.5vw; margin-top:0.6vw; vertical-align:top;" id="image_chest"></img>
+							<div><h4 style="margin-bottom:0px; margin-left:1vw; font-size:4vw;" id="text_globalResearchPot">Total Research Pot: <span id="num_globalResearchPot">?</span> TRX <br id="br2" />(8% distributed daily)</h4></div>
+						</div></div>
+						<img src="img/factory.gif" class="mx-auto d-block" style="width:90%; max-width:690px;"></img>
+						<span class="text-center goo"><h4 style="margin-top:6vw; font-size:4vw;" id="text_production">Your lab produces <span id="num_production">?</span> Goo/s, <span id="num_prodPercent">?</span>% of the Global Production</h4></span>
+						<span class="text-center goo"><h4 style="margin-top:3vw; font-size:4vw;" id="text_researchPot">In <span id="text_timer">??:??:??</span>, you will earn approximately <span id="estimateEarning">?</span> TRX <br /> of today's <span id="num_DailyResearchPot">?</span> TRX research pot</h4></span>
+						
+						<div class="row justify-content-center" style="margin-top:16px; margin-left:8px; margin-right:8px; margin-bottom:16px;">
+							<div class="col" style="padding-left:4px; padding-right:4px; min-width:250px; max-width:320px; margin-top:8px;">
+								<div class="card">
+									<div class="card-body text-center">
+										<h5 class="goo text-center" style="margin-top:-6px;">Goo Deposit Pot</h5>
+										<img class="mx-auto d-block" src="img/treasurechest.png" style="height:60px;"></img>
+										<h5 class="card-subtitle text-center" style="margin-top:4px;">Pot: <span id="gooPotTrx">0</span> TRX</h5>
+										<h6 class="card-subtitle text-center" style="margin-top:4px;"><span id="potTimer">00:00:00</span> left</h6>
+										<div class="text-center" style="display: -webkit-inline-box;">
+											<h5 class="card-subtitle text-center" style="margin-top:4px;">Split between: <span id="gooPotTotal">0</span></h5>
+											<img src="img/goobig.png" style="max-height:16px; margin-top:5px; margin-left:4px;"></img>
+										</div>
+										<div class="text-center" style="display: -webkit-inline-box;">
+											<h6 class="card-subtitle text-center text-muted" style="margin-top:4px;">Your deposits: <span id="gooPotDeposit">0</span></h6>
+											<img src="img/goobig.png" style="max-height:12px; margin-top:1px; margin-left:4px;"></img>
+										</div>
+										<div class="row" style="margin-top:4px; margin-bottom:-8px;">
+											<div class="col-8" style="padding:0px;">
+												<div class="input-group" style="padding:8px; padding-bottom:0px; margin-top:-4px;">
+													<input type="text" class="form-control form-control-sm" placeholder="Amount" id="gooPotDepositAmt">
+													<div class="input-group-append">
+														<span class="input-group-text form-control-sm" style="width:20px; padding-left:4px; padding-right:4px;">X</span>
+														<button class="btn btn-primary btn-sm" type="button" id="button-addon2" onClick="maxDepositGoo()">Max</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-4" style="padding:0px;">
+												<div class="input-group" style="margin-top:4px; padding-right:8px;">
+													<button class="btn btn-sm btn-danger" style="width:100%;" type="button" onClick="depositGoo()">Deposit</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="tut" style="position:absolute; right:0; margin-right:16px; margin-top:16px;">
+										<div id="tutUnitRaffle" data-toggle="modal" data-target="#tutModalDepositPot">
+											<a style="cursor:pointer;"><span class="fas fa-question-circle text-info" style="font-size:20px;"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col" style="padding-left:4px; padding-right:4px; min-width:250px; max-width:320px; margin-top:8px;">
+								<div class="card">		
+									<div class="card-body text-center">
+										<h5 class="goo text-center" style="margin-top:-6px;">Unique Item Raffle</h5>
+										<img class="mx-auto d-block" src="img/rare.png" style="height:60px;"></img>
+										<h5 class="card-subtitle text-center" style="margin-top:4px;">Worth 0.5 TRX</h5>
+										<h6 class="card-subtitle text-center" style="margin-top:4px;">00:00:00 left</h6>
+										<div class="text-center" style="display: -webkit-inline-box;">
+											<h5 class="card-subtitle text-center" style="margin-top:4px;">Ticket cost: 1k</h5>
+											<img src="img/goobig.png" style="max-height:16px; margin-top:6px; margin-left:4px;"></img>
+										</div>
+										<h6 class="card-subtitle text-center text-muted" style="margin-top:5px;">(0 Tickets total)</h6>
+										<div class="row" style="margin-top:4px; margin-bottom:-8px;">
+											<div class="col-8" style="padding:0px;">
+												<div class="input-group" style="padding:8px; padding-bottom:0px; margin-top:-4px;">
+													<input type="text" class="form-control form-control-sm" placeholder="Amount" id="itemRaffleGoo">
+													<div class="input-group-append">
+														<span class="input-group-text form-control-sm" style="width:20px; padding-left:4px; padding-right:4px;">X</span>
+														<button class="btn btn-primary btn-sm" type="button" id="button-addon2" onClick="maxItemRaffleGoo()">Max</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-4" style="padding:0px;">
+												<div class="input-group" style="margin-top:4px; padding-right:8px;">
+													<button class="btn btn-sm btn-success" style="width:100%;" type="button">Buy</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div id="itemRaffleOverlay" class="card" style="width:100%; height:100%; border:none; position:absolute; top:0px; left:0px; background-color:rgba(0, 0, 0, 0.5);">
+									</div>
+									
+									<div class="tut" style="position:absolute; right:0; margin-right:16px; margin-top:16px;">
+										<div id="tutUnitRaffle" data-toggle="modal" data-target="#tutModalItemRaffle">
+											<a style="cursor:pointer;"><span class="fas fa-question-circle text-info" style="font-size:20px;"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col" style="padding-left:4px; padding-right:4px; min-width:250px; max-width:320px; margin-top:8px;">
+								<div class="card">
+									<div class="card-body text-center">
+										<h5 class="goo text-center" style="margin-top:-6px;">Rare Unit Raffle</h5>
+										<img class="mx-auto d-block" src="img/shrimpfarmer.png" style="height:60px;"></img>
+										<div class="text-center" style="display: -webkit-inline-box;">
+											<h5 class="card-subtitle text-center" style="margin-top:4px;">Makes: <span id="unitRaffleProd">?</span>/s</h5>
+											<img src="img/goobig.png" style="max-height:16px; margin-top:5px; margin-left:4px;"></img>
+										</div>
+										<h6 class="card-subtitle text-center" style="margin-top:4px;"><span id="unitRaffleTimer">00:00:00</span> left</h6>
+										<div class="text-center" style="display: -webkit-inline-box;">
+											<h5 class="card-subtitle text-center" style="margin-top:4px;">Ticket cost: 1k</h5>
+											<img src="img/goobig.png" style="max-height:16px; margin-top:5px; margin-left:4px;"></img>
+										</div>
+										<h6 class="card-subtitle text-center text-muted" style="margin-top:4px;">(<span id="unitRaffleTotalTickets">0</span> Tickets total)</h6>
+										<div class="row" style="margin-top:4px; margin-bottom:-8px;">
+											<div class="col-8" style="padding:0px;">
+												<div class="input-group" style="padding:8px; padding-bottom:0px; margin-top:-4px;">
+													<input type="text" class="form-control form-control-sm" placeholder="Amount" id="unitRaffleGoo">
+													<div class="input-group-append">
+														<span class="input-group-text form-control-sm" style="width:20px; padding-left:4px; padding-right:4px;">X</span>
+														<button class="btn btn-primary btn-sm" type="button" id="button-addon2" onClick="maxUnitRaffleGoo()">Max</button>
+													</div>
+												</div>
+											</div>
+											<div class="col-4" style="padding:0px;">
+												<div class="input-group" style="margin-top:4px; padding-right:8px;">
+													<button class="btn btn-sm btn-success" style="width:100%;" type="button" onClick="buyUnitRaffleTickets()">Buy</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div id="unitRaffleOverlay" class="card" style="width:100%; height:100%; border:none; position:absolute; top:0px; left:0px; background-color:rgba(0, 0, 0, 0.5);">
+									</div>
+									
+									<div class="tut" style="position:absolute; right:0; margin-right:16px; margin-top:16px;">
+										<div id="tutUnitRaffle" data-toggle="modal" data-target="#tutModalUnitRaffle">
+											<a style="cursor:pointer;"><span class="fas fa-question-circle text-info" style="font-size:20px;"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col" id="rightCol" style=" margin-bottom:140px; margin-top:0; padding:0;">
+					
+					<div id="productionSection" style="margin:0px; padding:0px; overflow-y: auto; overflow-x:hidden; position:absolute; height:100%; margin-bottom:0px; padding-bottom:0px;">
+						<div class="jumbotron tut text-center" style="margin:8px; padding:8px;">
+							<h4 class="text-info" style="margin-top:8px;">Production</h4>
+							Each of your production units will produce <span class="text-emphasis">Goo</span> for you every second.
+							With the <span class="text-emphasis">Goo</span> they produce, you can buy more units or upgrade them in various ways to make them more efficient.
+							Some of the upgrades will require <span class="text-emphasis">TRX</span> instead of <span class="text-emphasis">Goo</span>.
+						</div>
+						<div class="row" id="productionGrid" style="margin:0px; padding:0px;">
+							
+						</div>
+					</div>
+					
+					<div id="barracksSection" style="margin:0px; padding:0px; overflow-y: auto; overflow-x:hidden; position:absolute; height:100%; margin-bottom:0px; padding-bottom:0px;">
+						<div class="jumbotron tut text-center" style="margin:8px; padding:8px;">
+							<h4 class="text-info" style="margin-top:8px;">Barracks</h4>
+							Here you can buy units which can be used to attack other players and steal their <span class="text-emphasis">Goo</span>, or to defend your own factory from attackers.
+							Your army's units are upgradable in a similar way to your production units.
+						</div>
+						<div class="row" style="margin:0px; padding:0px;" id="barracksGrid">
+							
+						</div>
+					</div>
+					
+					<div class="text-center" id="battleSection" style="margin:0px; padding:0px; overflow-y: auto; overflow-x:hidden; position:absolute; width:100%; height:100%; margin-bottom:0px;">
+						<div class="jumbotron tut" style="margin:8px; padding:8px;">
+							<h4 class="text-info" style="margin-top:8px;">Battle</h4>
+							Here you can attack other players. If the attack power of your units is higher than the defence power of your target, you can attack them and steal <span class="text-emphasis">Goo</span> equal to your army's <span class="text-emphasis">Goo</span> stealing capacity.
+							If the defence of a target is higher than your attack power, the attack will fail. 
+							Each time you attack successfully, there is a cooldown of 30 minutes. If you fail an attack, the cooldown is 10 minutes. While the cooldown is active, your defense is also halved.
+						</div>
+						<div class="jumbotron" style="margin:8px; padding:8px;">
+							<h4 class="text-success" style="margin-top:8px;" id="battleCooldown">You're able to attack!</h4>
+							<h4 style="margin-top:8px;">Your army currently has</h4>
+							<h5 class="text-muted" style="margin-top:8px;"><span class="text-warning" id="totalAttk">0</span> Attack Power</h5>
+							<h5 class="text-muted" style="margin-top:8px;"><span class="text-info" id="totalDef">0</span> Defense Power</h5>
+							<h5 class="text-muted" style="margin-top:8px;"><span class="goo" id="totalSteal">0</span> Goo Stealing Capacity</h5>
+						</div>
+						<div class="card bg-dark" style="margin:8px;">
+						<ul class="list-group leaderboard" style="margin:8px;">
+							<div id="lbGrid">
+							</div>
+							<div class="row" style="margin-top:8px;">
+								<div class="col-auto" style="padding-right:0px;">
+									<button class="btn btn-sm btn-primary float-left" style="width:30px; height:30px; padding-top:1px;" onClick="lbFirst()"><span class="fas fa-angle-double-left" style="font-size:10px; margin-top:0px;"></span></button>
+									<button class="btn btn-sm btn-primary float-left" style="width:30px; height:30px; padding-top:1px;" onClick="lbPrev()"><span class="fas fa-angle-left" style="font-size:10px; margin-top:0px;"></span></button>
+								</div>
+								<div class="col-auto mx-auto" style="padding:0px;">
+									<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text" style="background-color:#272B30; border: 1px solid rgba(0, 0, 0, 0.6); color:#aaa;">Lower DEF only</span>
+									</div>
+										<div class="input-group-append">
+											<div class="input-group-text" style="background-color:#272B30; border: 1px solid rgba(0, 0, 0, 0.6); color:#aaa;">
+												<input type="checkbox" aria-label="Checkbox" id="lbFilterCb" onClick="updateLb()">
+											</div>
+										</div>
+										<button class="btn btn-primary float-center" style="height:30px; padding-top:1px;" onClick="battleRefresh()"><span class="fas fa-sync-alt" style="font-size:10px; margin-top:0px;"></span></span></button>
+									</div>
+								</div>
+								<div class="col-auto" style="padding-left:0px;">
+									<button class="btn btn-sm btn-primary float-right" style="width:30px; height:30px; padding-top:1px;" onClick="lbNext()"><span class="fas fa-angle-right" style="font-size:10px; margin-top:0px;"></span></button>
+								</div>
+							</div>
+						</ul>
+						</div>
+						<div class="jumbotron text-center;" style="word-wrap:break-word; margin:8px; padding:8px; overflow-x:hidden; overflow-y:auto; margin-bottom:8px;">
+							<h4 style="margin-top:8px;">Your battle log:</h4>
+							<div id="battleLogGrid">
+							
+							</div>
+						</div>
+					</div>
+					
+					<div id="itemSection" style="overflow-y: auto; overflow-x:hidden; position:absolute; width:100%; height:100%; margin-bottom:0px;">
+						<div class="jumbotron text-center tut" style="margin:8px; padding:8px;">
+							<h4 class="text-info" style="margin-top:8px;">Rare Item Shop</h4>
+							Here you can buy the unique items won from raffles.
+							Prices go up 25% every purchase so don't miss out!<br/>
+							You make around 20% profit if someone buys your item after you.
+						</div>
+						<div id="itemGrid" class="row justify-content-center" style="margin:4px; padding:0px; padding-bottom:16px;">
+							
+						</div>
+					</div>
+					
+					<div id="refPage" style="overflow-y: auto; overflow-x:hidden; position:absolute; width:100%; height:100%; margin-bottom:0px;">
+						<div class="jumbotron text-center" style="margin:8px; padding:8px;">
+							<h4 style="margin-top:8px;">Referrals</h4>
+							<h6 style="margin-top:8px;">Earn 1% of your referal's dividends by spreading Goo!</h6>
+							<h6 style="margin-top:8px;">Your referral link:</h6>
+							<h6><span id="refLink" class="text-muted" style="font-size:calc(0.5vw + 0.4rem);">https://trongoo.io?</span></h6>
+							<a tabindex="0" id="copyBtn" class="btn btn-sm btn-primary" onclick="copyToClipboard('#refLink')" data-container="body" data-toggle="popover" data-trigger="focus" title="Copied!" data-placement="bottom" data-content="Now go paste it somewhere!">Copy your referral link</a>
+						</div>
+						<div class="jumbotron text-center" style="margin:8px; padding:8px;">
+							<h4 style="margin-top:8px;">Your Referral Stats:</h4>
+							<h5 class="text-secondary">Users Referred: <span class="text-success"><span id="refNum">0</span></span></h5>
+							<h5 class="text-secondary">Total Referral Bonus: <span class="text-success"><span id="refBonus">0</span> TRX</span></h5>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+             <!-- <div class="container-fluid">
+                <!-- <div style="padding-top:90px">
+                <div>
+                    <div  class="row" id="productionGrid" style="margin-left:8px; margin-right:8px; margin-bottom:90px;"></div>
+                </div>
+            </div>-->
+            
+            <div class="footer" style="-webkit-transform:translateZ(0); transform:translateZ(0);">
+                <div class="container-fluid bg-primary footer-content">
+                    <div class="row footer-inner">
+                        <div class="col-md-4 text-center" style="padding:0px;">
+                            <div class="text-center" style="display: -webkit-inline-box; margin-top:-2px;">
+                                <img src="img/goobig.png" style="max-height:20px;"></img>
+                                <div>
+                                    <h5 style="margin-top:2px; margin-bottom:0px; margin-left:8px;"><span id="playerGoo">?</span> <b>Goo</b></h5>
+                                </div>
+                            </div>
+                        </div>
+						<div class="col-md-4 text-center" style="padding:0px; margin-bottom:4px;">
+							<div class="text-center" style="display: -webkit-inline-box;">
+								<h5 style="margin-bottom:2px;">Wallet: <span id="playerWallet">?</span> <b>TRX</b></h5>
+							</div>
+                        </div>
+                        <div class="col-md-4 text-center" style="padding:0px;">
+							<div class="text-center" style="display: -webkit-inline-box;">
+								<h5 style="margin-bottom:2px;">Rewards: <span id="playerRewards">?</span> <b>TRX</b></h5>
+								<button class="btn btn-sm btn-secondary" style="margin-left:8px; margin-top:-5px; margin-bottom:-3px;" onClick="withdraw()">Withdraw</button>
+							</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+						<div style="width:220px;">
+							<h5 class="modal-title text-info" id="tutorialModalLabel">Tutorial</h5>
+							</div>
+							<div class="input-group input-group-sm float-right">
+								<div class="input-group-prepend">
+									<span class="input-group-text" style="background-color:#272B30; border: 1px solid rgba(0, 0, 0, 0.6); color:#aaa;">Show tutorials</span>
+								</div>
+								<div class="input-group-append">
+									<div class="input-group-text" style="background-color:#272B30; border: 1px solid rgba(0, 0, 0, 0.6); color:#aaa;">
+										<input id="toggleTuts" type="checkbox" aria-label="Checkbox" checked>
+									</div>
+								</div>
+							</div>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							<h5 class="goo">How To Play</h5>
+							Your goal will be to collect as much <span class="text-emphasis">Goo</span> as you can, either by producing it yourself or stealing it from others.<br/>
+							You'll reach this goal by spending your <span class="text-emphasis">Goo</span> wisely. 
+							Although the game can be played without spending TRX, investing some of it can give a decent boost to your production.<br/>
+							Once your factory is producing a decent amount of <span class="text-emphasis">Goo</span>, you can start earning TRX with it.
+							
+							<h5 class="goo" style="margin-top:8px;">Earning TRX</h5>
+							There are two ways to earn <span class="text-emphasis">TRX</span> while playing <span class="text-emphasis">TronGoo</span>.<br/>
+							First, there's the <span class="text-emphasis">Research Pot</span>.
+							Each day, you'll get a percentage of this pot based on your production of <span class="text-emphasis">Goo</span> per second relative to that of the other players.<br/>
+							The other way is to deposit <span class="text-emphasis">Goo</span> in the <span class="text-emphasis">Goo Deposit Pot</span> which can be found at the bottom of the home page.
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="tutModalItemRaffle" tabindex="-1" role="dialog" aria-labelledby="tutModalItemRaffleLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-info" id="tutModalItemRaffleLabel">Unique Item Raffle</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							At the end of a countdown, these <span class="text-emphasis">Items</span> will be randomly rewarded to one of the ticket holders.<br/>
+							The more tickets you own, the more chance you have of winning the <span class="text-emphasis">Item</span>.
+							These <span class="text-emphasis">Items</span> can have some really powerful effects, so they're worth going for.<br/>
+							<span class="text-emphasis">Items</span> owned by players can be bought from them in the <span class="text-emphasis">Item Shop</span>.
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="tutModalUnitRaffle" tabindex="-1" role="dialog" aria-labelledby="tutModalUnitRaffleLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-info" id="tutModalUnitRaffleLabel">Rare Unit Raffle</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							At the end of a countdown, these <span class="text-emphasis">Units</span> will be randomly rewarded to one of the ticket holders.<br/>
+							The more tickets you own, the more chance you have of winning the <span class="text-emphasis">Unit</span>.
+							These <span class="text-emphasis">Units</span> can have some really powerful effects, so they're worth going for.<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="tutModalDepositPot" tabindex="-1" role="dialog" aria-labelledby="tutModalDepositPotLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-info" id="tutModalDepositPotLabel">Goo Deposit Pot</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							The contents of the Deposit Pot will be split each day between the players which have deposited <span class="text-emphasis">Goo</span>.
+							The more Goo you have deposited, the bigger the TRX share will be that you'll receive.
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+						<h5 class="modal-title text-info" id="infoModalLabel">Info</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body">
+							Anything.
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="freeModal" tabindex="-1" role="dialog" aria-labelledby="freeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h5 class="modal-title goo w-100" id="freeModalLabel">Welcome to TronGoo!</h5>
+						</div>
+						<div class="modal-body text-center">
+							You can start playing (for free!) by claiming your first production unit: an <span class="text-emphasis">Intern Kitty</span>. Good luck running your very own  <span class="text-emphasis">Goo</span> factory!
+							<img class="mx-auto d-block" src="img/internkitty.png" style="max-height:120px; margin-top:16px;" />
+							<button class="btn btn-success" style="margin-top:16px; width:100%; margin-bottom:8px;" onClick="buyGooUnits(1,1)">Claim</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="noTronWebModal" tabindex="-1" role="dialog" aria-labelledby="noTronWebModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h5 class="modal-title goo w-100" id="noTronWebModalLabel">Welcome to TronGoo!</h5>
+						</div>
+						<div class="modal-body text-center">
+							This game requires a TRON compatible wallet such as 
+							<a href="https://chrome.google.com/webstore/detail/tronlink/ibnejdfjmmkpcnlpebklmnkoeoihofec?utm_source=chrome-ntp-icon">TronLink</a> (Chrome), 
+							<a href="https://www.guildchat.io/">GuildChat</a> (Android + iOS) or 
+							<a href="https://www.mathwallet.org/en/">Math Wallet</a> (iOS)
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="tronWebModal" tabindex="-1" role="dialog" aria-labelledby="tronWebModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h5 class="modal-title goo w-100" id="tronWebModalLabel">Loading...</h5>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="battleResultModal" tabindex="-1" role="dialog" aria-labelledby="battleResultLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+						<h5 class="modal-title goo" id="battleResultLabel">Battle Result</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						</div>
+						<div class="modal-body text-center" id="battleResultSection">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+		
+		
+		<script id="unitTmpl" type="text/x-jsrender">
+			{^{props}}
+			<div class="col-xl-12" style="margin-top:8px; margin-bottom:8px; padding-left:8px; padding-right:8px;">
+				<div class="card" style="width:100%; border:none;">
+					<div class="row" style="margin-left:0px; margin-right:0px;">
+						<div class="col" style="padding-left:0px; padding-right:0px; min-width:190px;">
+							<div class="card-body text-center" style="padding-left:2px; padding-right:2px; padding-top:8px; padding-bottom:0px;">
+								<h4 class="card-title goo text-center">{^{:prop.name}}</h4>	
+								<h6 class="card-subtitle mb-2 text-center">{^{:prop.numOwned}} / {^{:prop.maxOwned}}</h6>
+								<!--<div class="text-center" style="display: -webkit-inline-box;">-->
+									<!--<img src="img/goobig.png" style="max-height:12px; margin-top:-20px; margin-right:4px;"/>-->
+									<h6 class="card-subtitle mb-2 text-center">{^{:prop.unitTotal}}</h6>
+								<!--</div>-->
+								<img class="mx-auto d-block" src="{{:prop.image}}" style="height:99px; padding-top:0px;"/><!--{{:prop.image}}-->
+								<h6 class="card-subtitle mb-2 text-center" style="margin-top:8px;">{^{:prop.description}}</h6>
+								<h6 class="card-subtitle mb-2 text-center text-muted" style="margin-top:-4px;">Cost: {^{:prop.cost}}</h6>
+								<div class="input-group" style="padding:8px; padding-bottom:0px; margin-top:-4px;">
+									<input type="text" class="form-control form-control-sm" placeholder="Amount" id="buyField{{:prop.id}}">
+									<div class="input-group-append">
+										<span class="input-group-text form-control-sm">X</span>
+										<button class="btn btn-primary btn-sm" type="button" id="button-addon2" onClick="maxUnits({{:prop.id}})">Max</button>
+									</div>
+								</div>
+								<div class="input-group" style="padding:8px; padding-top:8px; margin-top:0px;">
+									<button class="btn btn-sm btn-success" style="width:100%;" type="button" onClick="buyUnits({{:prop.id}})">Buy</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-auto col-upgrades" style="margin:0px; padding:0px; min-width:320px;">
+							<div class="card bg-primary" style="margin:8px;">
+								<div class="row">
+									<div class="col-2 align-middle" style="padding-right:0px; padding-left:32px;">
+										<img class=" mx-auto d-block" src="" data-link="src{:prop.upgradeImage1}" style="height:40px; padding-top:0px; margin-top:24px;"/><!--{{:prop.upgradeImage1}}-->
+									</div>
+									<div class="col" style="padding-left:8px; padding-right:0px;">
+										<div class="card-body" style="padding-left:0px; padding-right:0px;">
+											<h5 style="font-size:1.1rem;" class="card-title goo text-center">{^{:prop.upgradeText1}}</h5>
+											<h6 class="card-subtitle mb-2 text-center" style="margin-top:15px; margin-bottom:0px !important;">{^{:prop.upgradesPurchased1}} / {^{:prop.upgradesAvailable1}}</h6>
+										</div>
+									</div>
+									<div class="col-auto" style="padding-left:0px; width:100px;">
+										<div class="card-body float-right" style="padding-left:0px; padding-right:16px; width:100px;">
+											<div class="input-group" style="">
+											{^{if !prop.upgrade1Available }}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button" disabled="true">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{else}}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button" onClick="buyUpgrade({{:prop.id}},0)">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{/if}}
+											</div>
+											<h6 class="card-subtitle mb-2 text-muted text-center" style="margin-top:7px; margin-bottom:0px !important;">{^{:prop.upgradeCost1}}</h6>
+										</div>														
+									</div>
+								</div>
+								{^{if !prop.upgrade1Available }}
+								<div class="card" style="width:100%; height:100%; border:none; position:absolute; top:0px; left:0px; background-color:rgba(0, 0, 0, 0.5);">
+								</div>
+								{{/if}}
+							</div>
+							<div class="card bg-primary" style="margin:8px;">
+								<div class="row">
+									<div class="col-2 align-middle" style="padding-right:0px; padding-left:32px;">
+										<img class=" mx-auto d-block" src="" data-link="src{:prop.upgradeImage2}" style="height:40px; padding-top:0px; margin-top:24px;"/><!--{{:prop.upgradeImage2}}-->
+									</div>
+									<div class="col" style="padding-left:8px; padding-right:0px;">
+										<div class="card-body" style="padding-left:0px; padding-right:0px;">
+											<h5 style="font-size:1.1rem;" class="card-title goo text-center">{^{:prop.upgradeText2}}</h5>
+											<h6 class="card-subtitle mb-2 text-center" style="margin-top:15px; margin-bottom:0px !important;">{^{:prop.upgradesPurchased2}} / {^{:prop.upgradesAvailable2}}</h6>
+										</div>
+									</div>
+									<div class="col-auto" style="padding-left:0px; width:100px;">
+										<div class="card-body float-right" style="padding-left:0px; padding-right:16px; width:100px;">
+											<div class="input-group" style="">
+											{^{if !prop.upgrade2Available }}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button" disabled="true">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{else}}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button"onClick="buyUpgrade({{:prop.id}},1)">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{/if}}
+											</div>
+											<h6 class="card-subtitle mb-2 text-muted text-center" style="margin-top:7px; margin-bottom:0px !important;">{^{:prop.upgradeCost2}}</h6>
+										</div>														
+									</div>
+								</div>
+								{^{if !prop.upgrade2Available }}
+								<div class="card" style="width:100%; height:100%; border:none; position:absolute; top:0px; left:0px; background-color:rgba(0, 0, 0, 0.5);">
+								</div>
+								{{/if}}
+							</div>
+							<div class="card bg-primary" style="margin:8px;">
+								<div class="row">
+									<div class="col-2 align-middle" style="padding-right:0px; padding-left:32px;">
+										<img class=" mx-auto d-block" src="" data-link="src{:prop.upgradeImage3}" style="height:40px; padding-top:0px; margin-top:24px;"/><!--{{:prop.upgradeImage3}}-->
+									</div>
+									<div class="col" style="padding-left:8px; padding-right:0px;">
+										<div class="card-body" style="padding-left:0px; padding-right:0px;">
+											<h5 style="font-size:1.1rem;" class="card-title goo text-center">{^{:prop.upgradeText3}}</h5>
+											<h6 class="card-subtitle mb-2 text-center" style="margin-top:15px; margin-bottom:0px !important;">{^{:prop.upgradesPurchased3}} / {^{:prop.upgradesAvailable3}}</h6>
+										</div>
+									</div>
+									<div class="col-auto" style="padding-left:0px; width:100px;">
+										<div class="card-body float-right" style="padding-left:0px; padding-right:16px; width:100px;">
+											<div class="input-group" style="">
+											{^{if !prop.upgrade3Available }}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button" disabled="true">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{else}}
+												<button class="btn btn-sm btn-info m-auto" style="width:100%; max-width:120px;" type="button" onClick="buyUpgrade({{:prop.id}},2)">Buy</button><!--{{if prop.numOwned=0 }} disabled="true" {{/if}}-->
+											{{/if}}
+											</div>
+											<h6 class="card-subtitle mb-2 text-muted text-center" style="margin-top:7px; margin-bottom:0px !important;">{^{:prop.upgradeCost3}}</h6>
+										</div>														
+									</div>
+								</div>
+								{^{if !prop.upgrade3Available }}
+								<div class="card" style="width:100%; height:100%; border:none; position:absolute; top:0px; left:0px; background-color:rgba(0, 0, 0, 0.5);">
+								</div>
+								{{/if}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/props}}
+		</script>
+		
+		<script id="itemTmpl" type="text/x-jsrender">
+			{^{props}}
+			<div class="col" style="padding-left:4px; padding-right:4px; min-width:250px; max-width:320px; margin-top:8px;">
+				<div class="card">
+					<div class="card-body text-center">
+						<h5 class="goo text-center" style="margin-top:-6px;">{^{:prop.name}}</h5>
+						<img class="mx-auto d-block" src="{{:prop.image}}" style="height:60px;"/>
+						<h5 class="card-subtitle text-center" style="margin-top:4px;">Owner: {^{:prop.owner}}</h5>
+						<h6 class="card-subtitle text-center" style="margin-top:4px;">{^{:prop.description}}</h6>
+						<div class="text-center" style="display: -webkit-inline-box;">
+							<h5 class="card-subtitle text-center" style="margin-top:4px;">Cost: {^{:prop.cost}}</h5>
+							<img src="img/goobig.png" style="max-height:16px; margin-top:6px; margin-left:4px;"/>
+						</div>
+						<button class="btn btn-sm btn-success" style="width:100%; margin-top:8px;" type="button">Buy</button>
+					</div>
+				</div>
+			</div>
+			{{/props}}
+		</script>
+		
+		<script id="lbTmpl" type="text/x-jsrender">
+			{^{props}}
+			<li class="list-group-item text-left align-items-center">
+				<div class="row">
+					<div class="col-sm-6">
+						<h5 class="text-muted" style="width:100%; text-overflow:ellipsis; white-space:nowrap; overflow: hidden; margin-top:2px; margin-bottom:2px; height:26px;">
+							<span class="gold">{^{:prop.position}}</span>
+							<a class="text-muted" href="#" style="padding-left:16px; height:26px;">{^{:prop.address}}</a>
+						</h5>
+					</div>
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-auto text-left" style="padding-left:4px; padding-right:0px; margin-top:6px;">
+								<h6 style="margin-bottom:2px; font-size:0.9rem;">Goo: <span class="goo">{^{:prop.goo}}</span></h6>
+							</div>
+							<div class="col text-center" style="padding:0px; margin-top:6px;">
+								<h6 style="margin-bottom:2px; font-size:0.9rem;">Defence: <span class="text-info">{^{:prop.defense}}</span></h6>
+							</div>
+							<div class="col-auto text-right" style="padding-left:0px; padding-right:4px;">
+							{^{if !prop.canAttack }}
+								<button class="btn btn-sm btn-warning" disabled="true">Attack!</button>
+							{{else}}
+								<button class="btn btn-sm btn-warning" onClick="attack({{:prop.id}})">Attack!</button>
+							{{/if}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			{{/props}}
+		</script>
+		
+		<script id="battleLogTmpl" type="text/x-jsrender">
+			{^{for entries}}
+				{^{if type=="yourAttackFailed"}}
+					<h6><span class="text-warning">You tried to attack</span> <a href="{{:url}}" class="text-muted log-address mx-none">{{:address}}</a> <span class="text-warning">but failed!</span></h6>
+				{{else type=="yourAttackSuccess"}}
+					<h6><span class="text-success">You attacked</span> <a href="{{:url}}" class="text-muted log-address mx-none">{{:address}}</a> <span class="text-success">and stole {{:stolen}} Goo!</span></h6>
+				{{else type=="enemyAttackFailed"}}
+					<h6><a class="text-muted log-address mx-none" href="{{:url}}">{{:address}}</a> <span class="text-info">tried to attack you but failed!</span></h6>
+				{{else type=="enemyAttackSuccess"}}
+					<h6><a class="text-muted log-address mx-none" href="{{:url}}">{{:address}}</a> <span class="text-danger">attacked you and stole {{:stolen}} Goo!</span></h6>
+				{{/if}}
+			{{/for}} 	
+		</script>
+		
+		<script id="battleResultTmpl" type="text/x-jsrender">
+			{^{if type=="yourAttackFailed"}}
+				<h6><span class="text-warning">You tried to attack</span> <a href="{{:url}}" class="text-muted log-address mx-none">{{:address}}</a> <span class="text-warning">but failed!</span></h6>
+			{{else type=="yourAttackSuccess"}}
+				<h6><span class="text-success">You attacked</span> <a href="{{:url}}" class="text-muted log-address mx-none">{{:address}}</a> <span class="text-success">and stole {{:stolen}} Goo!</span></h6>
+			{{else type=="enemyAttackFailed"}}
+				<h6><a class="text-muted log-address mx-none" href="{{:url}}">{{:address}}</a> <span class="text-info">tried to attack you but failed!</span></h6>
+			{{else type=="enemyAttackSuccess"}}
+				<h6><a class="text-muted log-address mx-none" href="{{:url}}">{{:address}}</a> <span class="text-danger">attacked you and stole {{:stolen}} Goo!</span></h6>
+			{{/if}}
+		</script>
+		
+        <script>
+        var ref = getUrlParam('ref',false);
+        if (ref !== false){
+            localStorage.setItem('ref', ref);
+            window.location.href =  window.location.href.split("?")[0];
+        }
+        
+		var homePage = $("#homePage");
+		var productionSection = $("#productionSection");
+		var productionGrid = $("#productionGrid");
+		var barracksSection = $("#barracksSection");
+		var barracksGrid = $("#barracksGrid");
+		var battleSection = $("#battleSection");
+		var itemSection = $("#itemSection");
+		var refPage = $("#refPage");
+		
+		/*var activeTab = location.hash;
+		console.log(activeTab);
+		if (activeTab == "#" || activeTab == "" || !activeTab)
+		{
+			activeTab = "#home";
+		}
+		console.log(activeTab);*/
+		
+		var activeTab = "";
+		var showTuts = localStorage.getItem("showTuts");
+
+		function reset()
+		{
+			$('[data-toggle="popover"]').popover();
+			
+			var scrollPos;
+			
+			if (activeTab == "#production")
+			{
+				scrollPos = $("#productionGrid").scrollTop();
+			}
+			else if (activeTab == "#barracks")
+			{
+				scrollPos = $("#barracksGrid").scrollTop();
+			}
+		
+			if ($(window).width() >= 1200)
+			{			
+				$("#leftCol").html(homePage);
+				
+				if (activeTab == "#home")
+				{
+					changeTab("#production");
+				}
+				
+				$("#image_goo").css({ "height":"1.5vw", "margin-top":"0.2vw" });
+				$("#image_chest").css({ "height":"1.5vw", "margin-top":"0.2vw" });
+				$("#text_globalProduction").css({ "margin-left": "0.5vw", "font-size":"1.5vw" });
+				$("#text_globalResearchPot").css({ "margin-left": "0.5vw", "font-size":"1.5vw", "margin-bottom":"1vw" });
+				$("#text_production").css({ "margin-top": "0.5vw", "font-size":"1.5vw" });
+				$("#text_researchPot").css({ "margin-top": "0.5vw", "font-size":"1.5vw" });
+			}
+			else if ($(window).width() >= 768)
+			{
+				$("#image_goo").css({ "height":"3vw", "margin-top":"0.4vw" });
+				$("#image_chest").css({ "height":"3vw", "margin-top":"0.4vw" });
+				$("#text_globalProduction").css({ "margin-left": "1vw", "font-size":"3vw" });
+				$("#text_globalResearchPot").css({ "margin-left": "1vw", "font-size":"3vw", "margin-bottom":"2vw" });
+				$("#text_production").css({ "margin-top": "1vw", "font-size":"3vw" });
+				$("#text_researchPot").css({ "margin-top": "1vw", "font-size":"3vw" });
+			}
+			else		
+			{
+				$("#image_goo").css({ "height":"4.5vw", "margin-top":"0.6vw" });
+				$("#image_chest").css({ "height":"4.5vw", "margin-top":"0.6vw" });
+				$("#text_globalProduction").css({ "margin-left": "1.5vw", "font-size":"4.5vw" });
+				$("#text_globalResearchPot").css({ "margin-left": "1.5vw", "font-size":"4.5vw", "margin-bottom":"3vw" });
+				$("#text_production").css({ "margin-top": "1.5vw", "font-size":"4.5vw" });
+				$("#text_researchPot").css({ "margin-top": "1.5vw", "font-size":"4.5vw" });
+			}
+
+			if ($(window).width() >= 1200)
+			{
+				$("#rightCol").css({ "max-width": "800px" });
+			}
+			else
+			{
+				$("#rightCol").css({ "max-width": "" });
+			}			
+			
+			if ($(window).width() >= 1200)
+			{
+				$(".col-upgrades").css({ "width": "25vw", "min-width": "320px" });
+			}
+			else if ($(window).width() >= 526)
+			{
+				$(".col-upgrades").css({ "width": "50vw", "min-width": "320px" });
+			}
+			else
+			{
+				$(".col-upgrades").css({ "width": "100%", "min-width": "0px" });
+			}
+			
+			if ($(window).width() < 768)
+			{
+				$("#rightCol").css({ "margin-bottom": "160px" });
+			}
+			else
+			{
+				$("#rightCol").css({ "margin-bottom": "110px" });
+			}
+			
+			if ($(window).width() < $(window).height())
+			{
+				$("#br1").removeClass("d-none");
+				$("#br2").removeClass("d-none");
+				$("#br3").removeClass("d-none");
+			}
+			else
+			{
+				$("#br1").addClass("d-none");
+				$("#br2").addClass("d-none");
+				$("#br3").addClass("d-none");
+			}
+			
+			if (showTuts == "false") {
+				$('.tut').hide();
+			}
+			
+			$("#grid").scrollTop(scrollPos);			
+		}
+		
+		function changeTab(tab)
+		{
+			$(activeTab).removeClass("active");
+			$(tab).addClass("active");
+			
+			if (tab == "#production")
+			{
+				var scrollPos = $("#productionGrid").scrollTop();
+				$("#rightCol").html(productionSection);
+				var template = $.templates("#unitTmpl");
+				template.link("#productionGrid", productionUnits);
+				//var htmlOutput = template.render(productionUnits);
+				//$("#grid").html(htmlOutput);
+				activeTab = tab;
+				$("#productionGrid").scrollTop(scrollPos);
+			}           
+            else if (tab == "#barracks")
+            {
+				var scrollPos = $("#barracksGrid").scrollTop();
+				$("#rightCol").html(barracksSection);
+				var template = $.templates("#unitTmpl");
+				template.link("#barracksGrid", barracksUnits);
+				//var htmlOutput = template.render(barracksUnits);
+				//$("#grid").html(htmlOutput);
+				activeTab = tab;
+				$("#barracksGrid").scrollTop(scrollPos);
+				
+            }
+			else if (tab == "#battle")
+            {
+				$("#rightCol").html(battleSection);
+				var template = $.templates("#lbTmpl");
+				template.link("#lbGrid", lbEntries);
+				var logTemplate = $.templates("#battleLogTmpl");
+				logTemplate.link("#battleLogGrid", battleLogEntries);
+				activeTab = tab;
+            }
+			else if (tab == "#itemShop")
+            {
+				$("#rightCol").html(itemSection);
+				var template = $.templates("#itemTmpl");
+				template.link("#itemGrid", items);
+				activeTab = tab;
+            }
+			else if (tab == "#referrals")
+			{
+				$("#rightCol").html(refPage);
+				activeTab = tab;
+			}
+			else
+			{
+				$("#rightCol").html(homePage);
+				activeTab = "#home";
+			}
+			
+			reset();
+		}
+		
+		$(window).resize(function() { reset() });
+		
+		$('.navbar-nav>li>a').on('click', function(){
+			$('.navbar-collapse').collapse('hide');
+		});
+		
+		function copyToClipboard(element) {
+			var $temp = $("<input>");
+			$("body").append($temp);
+			$temp.val($(element).text()).select();
+			document.execCommand("copy");
+			$temp.remove();
+			$("#copyBtn").focus();
+		}
+		
+		$(document).ready(function() {
+			$("#tronWebModal").modal("show");
+			
+			changeTab(location.hash);
+
+			if (showTuts == "false")
+			{
+				console.log("Unchecked");
+				$('#toggleTuts').prop('checked', false);
+			}
+		});
+		
+		$('#toggleTuts').click(function() {
+			if($(this).is(':checked')) {
+				$('.tut').show();
+				showTuts = "true";
+				localStorage.setItem("showTuts", true);
+			} else {
+				$('.tut').hide();
+				showTuts = "false";
+				localStorage.setItem("showTuts", false);
+			}
+		});
+		
+		</script>
+    </body>
+</html>
+
+					
