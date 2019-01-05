@@ -82,11 +82,11 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(42, 500000000, 0, 1, 3, 10, 41);
         gameConfig.addUpgrade(234, 20000000000, 0, 1, 3, 10, 42);
 
-        gameConfig.addUpgrade(466, 500000, 0, 8, 3, 99, 0);
-        gameConfig.addUpgrade(43, 5000000, 0, 8, 3, 999, 466);
-        gameConfig.addUpgrade(44, 50000000, 0, 8, 3, 9999, 43);
-        gameConfig.addUpgrade(45, 500000000, 0, 8, 3, 99999, 44);
-        gameConfig.addUpgrade(235, 5000000000, 0, 8, 3, 999999, 45);
+        gameConfig.addUpgrade(466, 50000, 0, 8, 3, 99, 0);
+        gameConfig.addUpgrade(43, 500000, 0, 8, 3, 999, 466);
+        gameConfig.addUpgrade(44, 5000000, 0, 8, 3, 9999, 43);
+        gameConfig.addUpgrade(45, 50000000, 0, 8, 3, 99999, 44);
+        gameConfig.addUpgrade(235, 500000000, 0, 8, 3, 999999, 45);
     }
 
 
@@ -189,11 +189,11 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(102, 2500000000, 0, 1, 7, 10, 101);
         gameConfig.addUpgrade(246, 50000000000, 0, 1, 7, 10, 102);
 
-        gameConfig.addUpgrade(470, 500000, 0, 8, 7, 99, 0);
-        gameConfig.addUpgrade(103, 5000000, 0, 8, 7, 999, 470);
-        gameConfig.addUpgrade(104, 50000000, 0, 8, 7, 9999, 103);
-        gameConfig.addUpgrade(105, 500000000, 0, 8, 7, 99999, 104);
-        gameConfig.addUpgrade(247, 5000000000, 0, 8, 7, 999999, 105);
+        gameConfig.addUpgrade(470, 50000, 0, 8, 7, 99, 0);
+        gameConfig.addUpgrade(103, 500000, 0, 8, 7, 999, 470);
+        gameConfig.addUpgrade(104, 5000000, 0, 8, 7, 9999, 103);
+        gameConfig.addUpgrade(105, 50000000, 0, 8, 7, 99999, 104);
+        gameConfig.addUpgrade(247, 500000000, 0, 8, 7, 999999, 105);
     }
 
 
@@ -243,8 +243,8 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(132, 100000000, 0, 4, 40, 5, 131);
         gameConfig.addUpgrade(252, 2000000000, 0, 4, 40, 5, 132);
 
-        gameConfig.addUpgrade(472, 5000000, 0, 8, 40, 99, 0);
-        gameConfig.addUpgrade(133, 50000000, 0, 8, 40, 999, 472);
+        gameConfig.addUpgrade(472, 50000, 0, 8, 40, 99, 0);
+        gameConfig.addUpgrade(133, 5000000, 0, 8, 40, 999, 472);
         gameConfig.addUpgrade(134, 0, 1000 trx, 8, 40, 9999, 133);
         gameConfig.addUpgrade(135, 0, 2000 trx, 8, 40, 99999, 134);
         gameConfig.addUpgrade(253, 0, 5000 trx, 8, 40, 999999, 135);
@@ -270,8 +270,8 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(147, 120000000, 0, 5, 41, 10, 146);
         gameConfig.addUpgrade(255, 5000000000, 0, 5, 41, 10, 147);
 
-        gameConfig.addUpgrade(473, 5000000, 0, 8, 41, 99, 0);
-        gameConfig.addUpgrade(148, 50000000, 0, 8, 41, 999, 473);
+        gameConfig.addUpgrade(473, 50000, 0, 8, 41, 99, 0);
+        gameConfig.addUpgrade(148, 5000000, 0, 8, 41, 999, 473);
         gameConfig.addUpgrade(149, 0, 1000 trx, 8, 41, 9999, 148);
         gameConfig.addUpgrade(150, 0, 2000 trx, 8, 41, 99999, 149);
         gameConfig.addUpgrade(256, 0, 5000 trx, 8, 41, 999999, 150);
@@ -297,11 +297,11 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(162, 150000000, 0, 3, 42, 10, 161);
         gameConfig.addUpgrade(258, 7500000000, 0, 3, 42, 10, 162);
 
-        gameConfig.addUpgrade(474, 500000, 0, 8, 42, 99, 0);
-        gameConfig.addUpgrade(163, 5000000, 0, 8, 42, 999, 474);
-        gameConfig.addUpgrade(164, 50000000, 0, 8, 42, 9999, 163);
-        gameConfig.addUpgrade(165, 500000000, 0, 8, 42, 99999, 164);
-        gameConfig.addUpgrade(259, 5000000000, 0, 8, 42, 999999, 165);
+        gameConfig.addUpgrade(474, 50000, 0, 8, 42, 99, 0);
+        gameConfig.addUpgrade(163, 500000, 0, 8, 42, 999, 474);
+        gameConfig.addUpgrade(164, 5000000, 0, 8, 42, 9999, 163);
+        gameConfig.addUpgrade(165, 50000000, 0, 8, 42, 99999, 164);
+        gameConfig.addUpgrade(259, 500000000, 0, 8, 42, 999999, 165);
     }
 
 
@@ -324,8 +324,8 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(177, 160000000, 0, 6, 43, 4000, 176);
         gameConfig.addUpgrade(261, 10000000000, 0, 6, 43, 10000, 177);
 
-        gameConfig.addUpgrade(475, 5000000, 0, 8, 43, 99, 0);
-        gameConfig.addUpgrade(178, 50000000, 0, 8, 43, 999, 475);
+        gameConfig.addUpgrade(475, 50000, 0, 8, 43, 99, 0);
+        gameConfig.addUpgrade(178, 500000, 0, 8, 43, 999, 475);
         gameConfig.addUpgrade(179, 0, 1000 trx, 8, 43, 9999, 178);
         gameConfig.addUpgrade(180, 0, 2000 trx, 8, 43, 99999, 179);
         gameConfig.addUpgrade(262, 0, 5000 trx, 8, 43, 999999, 180);
@@ -351,8 +351,8 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(192, 200000000, 0, 5, 44, 10, 191);
         gameConfig.addUpgrade(264, 15000000000, 0, 5, 44, 10, 192);
 
-        gameConfig.addUpgrade(476, 5000000, 0, 8, 44, 99, 0);
-        gameConfig.addUpgrade(193, 50000000, 0, 8, 44, 999, 476);
+        gameConfig.addUpgrade(476, 50000, 0, 8, 44, 99, 0);
+        gameConfig.addUpgrade(193, 5000000, 0, 8, 44, 999, 476);
         gameConfig.addUpgrade(194, 0, 1000 trx, 8, 44, 9999, 193);
         gameConfig.addUpgrade(195, 0, 2000 trx, 8, 44, 99999, 194);
         gameConfig.addUpgrade(265, 0, 5000 trx, 8, 44, 999999, 195);
@@ -378,11 +378,11 @@ contract GameConfigSetup {
         gameConfig.addUpgrade(207, 2000000000, 0, 7, 45, 10, 206);
         gameConfig.addUpgrade(267, 50000000000, 0, 7, 45, 10, 207);
 
-        gameConfig.addUpgrade(477, 500000, 0, 8, 45, 99, 0);
-        gameConfig.addUpgrade(208, 5000000, 0, 8, 45, 999, 477);
-        gameConfig.addUpgrade(209, 50000000, 0, 8, 45, 9999, 208);
-        gameConfig.addUpgrade(210, 500000000, 0, 8, 45, 99999, 209);
-        gameConfig.addUpgrade(268, 5000000000, 0, 8, 45, 999999, 210);
+        gameConfig.addUpgrade(477, 50000, 0, 8, 45, 99, 0);
+        gameConfig.addUpgrade(208, 500000, 0, 8, 45, 999, 477);
+        gameConfig.addUpgrade(209, 5000000, 0, 8, 45, 9999, 208);
+        gameConfig.addUpgrade(210, 50000000, 0, 8, 45, 99999, 209);
+        gameConfig.addUpgrade(268, 500000000, 0, 8, 45, 999999, 210);
     }
     
 

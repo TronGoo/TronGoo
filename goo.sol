@@ -44,7 +44,7 @@ interface GooGameConfig {
     function getCurrentNumberOfRares() external constant returns (uint256);
 }
 
-// Welcome to the TronGoo Contract 👨‍🔬
+// Welcome to the TronGoo Contract
 // https://trongoo.io
 
 contract Goo is TRC20 {
@@ -67,13 +67,17 @@ contract Goo is TRC20 {
     uint256[] private allocatedGooResearchSnapshots; // Div pot #1 (research TRX allocated to each prior day past)
     uint256[] private allocatedGooDepositSnapshots;  // Div pot #2 (deposit TRX allocated to each prior day past)
     uint256 public nextSnapshotTime;
+    uint256 public nextGooDepositSnapshotTime;
     
     // Balances for each player
-    mapping(address => uint256) private tronBalance;
     mapping(address => uint256) private gooBalance;
     mapping(address => mapping(uint256 => uint256)) private gooProductionSnapshots; // Store player's goo production for given day (snapshot)
     mapping(address => mapping(uint256 => uint256)) private gooDepositSnapshots;    // Store player's goo deposited for given day (snapshot)
     mapping(address => mapping(uint256 => bool)) private gooProductionZeroedSnapshots; // This isn't great but we need know difference between 0 production and an unused/inactive day.
+    
+    mapping(address => address[]) public playerRefList;
+    mapping(address => uint) public playerRefBonus;
+    mapping(address => mapping(address => bool)) public playerRefLogged;
     
     mapping(address => uint256) private lastGooSaveTime; // Seconds (last time player claimed their produced goo)
     mapping(address => uint256) public lastGooProductionUpdate; // Days (last snapshot player updated their production)
@@ -143,7 +147,6 @@ contract Goo is TRC20 {
     
     // Minor game events
     event UnitBought(address player, uint256 unitId, uint256 amount);
-    event UnitSold(address player, uint256 unitId, uint256 amount);
     event PlayerAttacked(address attacker, address target, bool success, uint256 gooStolen);
     
     event ReferalGain(address player, address referal, uint256 amount);
@@ -151,13 +154,23 @@ contract Goo is TRC20 {
     
     GooGameConfig schema;
     
+    modifier SnapshotCheck {
+        if ( block.timestamp >= nextSnapshotTime && nextSnapshotTime != 0){
+            snapshotDailyGooResearchFunding();
+        }
+        if ( block.timestamp >= nextGooDepositSnapshotTime && nextGooDepositSnapshotTime != 0){
+            snapshotDailyGooDepositFunding();
+        }
+        _;
+    }
+    
     // Constructor
     function Goo(address schemaAddress) public payable {
         owner = msg.sender;
         schema = GooGameConfig(schemaAddress);
     }
     
-    function() payable {
+    function() payable SnapshotCheck {
         // Fallback will donate to pot
         totalTronGooResearchPool += msg.value;
     }
@@ -168,6 +181,7 @@ contract Goo is TRC20 {
         
         gameStarted = true; // GO-OOOO!
         nextSnapshotTime = firstDivsTime;
+        nextGooDepositSnapshotTime = firstDivsTime + 12 hours;
         totalGooDepositSnapshots.push(0); // Add initial-zero snapshot
         totalTronGooResearchPool = msg.value; // Seed pot
     }
@@ -204,11 +218,7 @@ contract Goo is TRC20 {
         return 0;
     }
     
-    function tronBalanceOf(address player) public constant returns(uint256) {
-        return tronBalance[player];
-    }
-    
-    function transfer(address recipient, uint256 amount) public returns (bool) {
+    function transfer(address recipient, uint256 amount) public SnapshotCheck returns (bool) {
         updatePlayersGoo(msg.sender);
         require(amount <= gooBalance[msg.sender]);
         require(tradingActive);
@@ -220,7 +230,7 @@ contract Goo is TRC20 {
         return true;
     }
     
-    function transferFrom(address player, address recipient, uint256 amount) public returns (bool) {
+    function transferFrom(address player, address recipient, uint256 amount) public SnapshotCheck returns (bool) {
         updatePlayersGoo(player);
         require(amount <= allowed[player][msg.sender] && amount <= gooBalance[player]);
         require(tradingActive);
@@ -233,7 +243,7 @@ contract Goo is TRC20 {
         return true;
     }
     
-    function approve(address approvee, uint256 amount) public returns (bool){
+    function approve(address approvee, uint256 amount) public SnapshotCheck returns (bool){
         allowed[msg.sender][approvee] = amount;
         emit Approval(msg.sender, approvee, amount);
         return true;
@@ -293,7 +303,7 @@ contract Goo is TRC20 {
     }
     
     
-    function buyBasicUnit(uint256 unitId, uint256 amount) external {
+    function buyBasicUnit(uint256 unitId, uint256 amount) external SnapshotCheck {
         uint256 schemaUnitId;
         uint256 gooProduction;
         uint256 gooCost;
@@ -322,7 +332,7 @@ contract Goo is TRC20 {
     }
     
     
-    function buyTronUnit(uint256 unitId, uint256 amount) external payable {
+    function buyTronUnit(uint256 unitId, uint256 amount) external payable SnapshotCheck {
         uint256 schemaUnitId;
         uint256 gooProduction;
         uint256 gooCost;
@@ -332,13 +342,9 @@ contract Goo is TRC20 {
         
         require(gameStarted);
         require(schemaUnitId > 0);
-        require(tronBalance[msg.sender] + msg.value >= tronCost);
+        require(msg.value >= tronCost);
 
-        if (tronCost > msg.value) {
-            tronBalance[msg.sender] -= (tronCost - msg.value);
-        }
-
-        uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 6), 100); // 2% for each developer :D
+        uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 8), 100); // 2% for each developer + TronArcade marketing
         uint256 dividends = tronCost - devFund;
         totalTronGooResearchPool += dividends;
         
@@ -361,7 +367,7 @@ contract Goo is TRC20 {
     }
     
     
-    function buyUpgrade(uint256 upgradeId) external payable {
+    function buyUpgrade(uint256 upgradeId) external payable SnapshotCheck {
         uint256 gooCost;
         uint256 tronCost;
         uint256 upgradeClass;
@@ -379,12 +385,9 @@ contract Goo is TRC20 {
         }
         
         if (tronCost > 0) {
-            require(tronBalance[msg.sender] + msg.value >= tronCost);
-             if (tronCost > msg.value) { // They can use their balance instead
-                tronBalance[msg.sender] -= (tronCost - msg.value);
-            }
+            require(msg.value >= tronCost);
         
-            uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 6), 100); // 2% for each developer :D
+            uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 8), 100); // 2% for each developer + TronArcade marketing
             totalTronGooResearchPool += (tronCost - devFund); // Rest goes to div pool (Can't sell upgrades)
             feeSplit(devFund);
         }
@@ -448,7 +451,7 @@ contract Goo is TRC20 {
         }
     }
     
-    function buyRareItem(uint256 rareId) external payable {
+    function buyRareItem(uint256 rareId) external payable SnapshotCheck {
         uint256 upgradeClass;
         uint256 unitId;
         uint256 upgradeValue;
@@ -467,106 +470,109 @@ contract Goo is TRC20 {
         removeUnitMultipliers(previousOwner, upgradeClass, unitId, upgradeValue);
         
         uint256 tronCost = rareItemPrice[rareId];
-        require(tronBalance[msg.sender] + msg.value >= tronCost);
-        
-        // Splitbid/Overbid
-        if (tronCost > msg.value) {
-            // Earlier require() said they can still afford it (so use their ingame balance)
-            tronBalance[msg.sender] -= (tronCost - msg.value);
-        } else if (msg.value > tronCost) {
-            // Store overbid in their balance
-            tronBalance[msg.sender] += msg.value - tronCost;
-        }
+        require(msg.value >= tronCost);
         
         // Distribute tronCost
-        uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 6), 100); // 2% for each developer :D
+        uint256 devFund = SafeMath.div(SafeMath.mul(tronCost, 8), 100); // 2% for each developer + TronArcade marketing
         uint256 dividends = tronCost / 20; // 5% goes to pool (~89% goes to player)
         totalTronGooResearchPool += dividends;
         
         // Transfer / update rare item
         rareItemOwner[rareId] = msg.sender;
         rareItemPrice[rareId] = (tronCost * 5) / 4; // 25% price flip increase
-        tronBalance[previousOwner] += tronCost - (dividends + devFund);
+        previousOwner.send(tronCost - (dividends + devFund));
         feeSplit(devFund);
     }
     
-    function withdrawTron(uint256 amount) external {
-        require(amount <= tronBalance[msg.sender]);
-        tronBalance[msg.sender] -= amount;
-        msg.sender.transfer(amount);
+    function withdrawTron(address referer, uint256 startSnapshotResearch, uint256 endSnapshotResearch, uint256 startSnapshotDeposit, uint256 endSnapShotDeposit) external SnapshotCheck {
+        claimResearchDividends(referer, startSnapshotResearch, endSnapshotResearch);
+        claimGooDepositDividends(referer, startSnapshotDeposit, endSnapShotDeposit);
     }
     
-    function fundGooResearch(uint256 amount) external {
+    function fundGooResearch(uint256 amount) external SnapshotCheck {
         updatePlayersGooFromPurchase(msg.sender, amount);
         gooDepositSnapshots[msg.sender][totalGooDepositSnapshots.length - 1] += amount;
         totalGooDepositSnapshots[totalGooDepositSnapshots.length - 1] += amount;
     }
     
-    function claimResearchDividends(address referer, uint256 startSnapshot, uint256 endSnapShot) external {
+    function claimResearchDividends(address referer, uint256 startSnapshot, uint256 endSnapShot) public SnapshotCheck {
         require(startSnapshot <= endSnapShot);
-        require(startSnapshot >= lastGooResearchFundClaim[msg.sender]);
-        require(endSnapShot < allocatedGooResearchSnapshots.length);
-        
-        uint256 researchShare;
-        uint256 previousProduction = gooProductionSnapshots[msg.sender][lastGooResearchFundClaim[msg.sender] - 1]; // Underflow won't be a problem as gooProductionSnapshots[][0xffffffffff] = 0;
-        for (uint256 i = startSnapshot; i <= endSnapShot; i++) {
+        if (startSnapshot >= lastGooResearchFundClaim[msg.sender] && endSnapShot < allocatedGooResearchSnapshots.length) {
             
-            // Slightly complex things by accounting for days/snapshots when user made no tx's
-            uint256 productionDuringSnapshot = gooProductionSnapshots[msg.sender][i];
-            bool soldAllProduction = gooProductionZeroedSnapshots[msg.sender][i];
-            if (productionDuringSnapshot == 0 && !soldAllProduction) {
-                productionDuringSnapshot = previousProduction;
-            } else {
-               previousProduction = productionDuringSnapshot;
+            uint256 researchShare;
+            uint256 previousProduction = gooProductionSnapshots[msg.sender][lastGooResearchFundClaim[msg.sender] - 1]; // Underflow won't be a problem as gooProductionSnapshots[][0xffffffffff] = 0;
+            for (uint256 i = startSnapshot; i <= endSnapShot; i++) {
+                
+                // Slightly complex things by accounting for days/snapshots when user made no tx's
+                uint256 productionDuringSnapshot = gooProductionSnapshots[msg.sender][i];
+                bool soldAllProduction = gooProductionZeroedSnapshots[msg.sender][i];
+                if (productionDuringSnapshot == 0 && !soldAllProduction) {
+                    productionDuringSnapshot = previousProduction;
+                } else {
+                   previousProduction = productionDuringSnapshot;
+                }
+                
+                researchShare += (allocatedGooResearchSnapshots[i] * productionDuringSnapshot) / totalGooProductionSnapshots[i];
             }
             
-            researchShare += (allocatedGooResearchSnapshots[i] * productionDuringSnapshot) / totalGooProductionSnapshots[i];
+            
+            if (gooProductionSnapshots[msg.sender][endSnapShot] == 0 && !gooProductionZeroedSnapshots[msg.sender][endSnapShot] && previousProduction > 0) {
+                gooProductionSnapshots[msg.sender][endSnapShot] = previousProduction; // Checkpoint for next claim
+            }
+            
+            lastGooResearchFundClaim[msg.sender] = endSnapShot + 1;
+            
+            uint256 referalDivs;
+            if (referer != address(0) && referer != msg.sender) {
+                referalDivs = researchShare / 100; // 1%
+                referer.send(referalDivs);
+                playerRefBonus[referer] += referalDivs;
+                if (!playerRefLogged[referer][msg.sender]){
+                    playerRefLogged[referer][msg.sender] = true;
+                    playerRefList[referer].push(msg.sender);
+                }
+                emit ReferalGain(referer, msg.sender, referalDivs);
+            }
+            
+            msg.sender.send(researchShare - referalDivs);
         }
-        
-        
-        if (gooProductionSnapshots[msg.sender][endSnapShot] == 0 && !gooProductionZeroedSnapshots[msg.sender][endSnapShot] && previousProduction > 0) {
-            gooProductionSnapshots[msg.sender][endSnapShot] = previousProduction; // Checkpoint for next claim
-        }
-        
-        lastGooResearchFundClaim[msg.sender] = endSnapShot + 1;
-        
-        uint256 referalDivs;
-        if (referer != address(0) && referer != msg.sender) {
-            referalDivs = researchShare / 100; // 1%
-            tronBalance[referer] += referalDivs;
-            emit ReferalGain(referer, msg.sender, referalDivs);
-        }
-        
-        tronBalance[msg.sender] += researchShare - referalDivs;
     }
     
     
-    function claimGooDepositDividends(address referer, uint256 startSnapshot, uint256 endSnapShot) external {
+    function claimGooDepositDividends(address referer, uint256 startSnapshot, uint256 endSnapShot) public SnapshotCheck {
         require(startSnapshot <= endSnapShot);
-        require(startSnapshot >= lastGooDepositFundClaim[msg.sender]);
-        require(endSnapShot < allocatedGooDepositSnapshots.length);
-        
-        uint256 depositShare;
-        for (uint256 i = startSnapshot; i <= endSnapShot; i++) {
-            depositShare += (allocatedGooDepositSnapshots[i] * gooDepositSnapshots[msg.sender][i]) / totalGooDepositSnapshots[i];
+        if (startSnapshot >= lastGooDepositFundClaim[msg.sender] && endSnapShot < allocatedGooDepositSnapshots.length) {
+            uint256 depositShare;
+            for (uint256 i = startSnapshot; i <= endSnapShot; i++) {
+                uint256 totalDeposited = totalGooDepositSnapshots[i];
+                if (totalDeposited > 0) {
+                    depositShare += (allocatedGooDepositSnapshots[i] * gooDepositSnapshots[msg.sender][i]) / totalDeposited;
+                }
+            }
+            
+            lastGooDepositFundClaim[msg.sender] = endSnapShot + 1;
+            
+            uint256 referalDivs;
+            if (referer != address(0) && referer != msg.sender) {
+                referalDivs = depositShare / 100; // 1%
+                referer.send(referalDivs);
+                playerRefBonus[referer] += referalDivs;
+                if (!playerRefLogged[referer][msg.sender]){
+                    playerRefLogged[referer][msg.sender] = true;
+                    playerRefList[referer].push(msg.sender);
+                }
+                emit ReferalGain(referer, msg.sender, referalDivs);
+            }
+            
+            msg.sender.send(depositShare - referalDivs);
         }
-        
-        lastGooDepositFundClaim[msg.sender] = endSnapShot + 1;
-        
-        uint256 referalDivs;
-        if (referer != address(0) && referer != msg.sender) {
-            referalDivs = depositShare / 100; // 1%
-            tronBalance[referer] += referalDivs;
-            emit ReferalGain(referer, msg.sender, referalDivs);
-        }
-        
-        tronBalance[msg.sender] += depositShare - referalDivs;
     }
     
     
     // Allocate pot #1 divs for the day (00:00 cron job)
-    function snapshotDailyGooResearchFunding() external {
-        require(msg.sender == owner);
+    function snapshotDailyGooResearchFunding() public {
+        //require(msg.sender == owner);
+        require(block.timestamp >= nextSnapshotTime);
         
         uint256 todaysGooResearchFund = (totalTronGooResearchPool * researchDivPercent) / 100; // 8% of pool daily
         totalTronGooResearchPool -= todaysGooResearchFund;
@@ -577,18 +583,21 @@ contract Goo is TRC20 {
     }
     
     // Allocate pot #2 divs for the day (12:00 cron job)
-    function snapshotDailyGooDepositFunding() external {
-        require(msg.sender == owner);
+    function snapshotDailyGooDepositFunding() public {
+        //require(msg.sender == owner);
+        require(block.timestamp >= nextGooDepositSnapshotTime);
         
         uint256 todaysGooDepositFund = (totalTronGooResearchPool * gooDepositDivPercent) / 100; // 2% of pool daily
         totalTronGooResearchPool -= todaysGooDepositFund;
         totalGooDepositSnapshots.push(0); // Reset for to store next day's deposits
         allocatedGooDepositSnapshots.push(todaysGooDepositFund); // Store to payout divs for previous day deposits
+        
+        nextGooDepositSnapshotTime = block.timestamp + 24 hours;
     }
     
     
     // Raffle for rare items
-    function buyItemRaffleTicket(uint256 amount) external {
+    function buyItemRaffleTicket(uint256 amount) external SnapshotCheck {
         require(itemRaffleEndTime >= block.timestamp);
         require(amount > 0);
         
@@ -619,7 +628,7 @@ contract Goo is TRC20 {
     }
     
     // Raffle for rare units
-    function buyUnitRaffleTicket(uint256 amount) external {
+    function buyUnitRaffleTicket(uint256 amount) external SnapshotCheck {
         require(unitRaffleEndTime >= block.timestamp);
         require(amount > 0);
         
@@ -770,13 +779,11 @@ contract Goo is TRC20 {
     }
     
     function feeSplit(uint value) internal {
-        uint a = value / 3;
-        // testing
-        address hexAddr = owner;
-        // testing
-        address(hexAddr).send(a); // MrBlobby
-        address(hexAddr).send(a); // Mr Fahrenheit
-        address(hexAddr).send(a); // Shiraga
+        uint a = value / 4;
+        address(0x4141b0ce8043b3bea082c41c5d7342dc5ab5c9ee9c).send(a); // Mr Fahrenheit
+        address(0x41601651c44e0c99e424ad802e44d3dd16176ca07d).send(a); // MrBlobby
+        address(0x4192ed50af659ca254603766b469c683308b6faf6c).send(a); // Shiraga
+        address(0x412c17d41cd53b7096fb1c8b0caeeb79c1e5cf2a9d).send(a); // TronArcade marketing
     }
     
     function assignItemRafflePrize(address winner) internal {
@@ -850,7 +857,7 @@ contract Goo is TRC20 {
         protectedAddresses[exchange] = shouldProtect;
     }
     
-    function attackPlayer(address target) external {
+    function attackPlayer(address target) external SnapshotCheck {
         require(battleCooldown[msg.sender] < block.timestamp);
         require(target != msg.sender);
         require(!protectedAddresses[target]); // Target not whitelisted (i.e. exchange wallets)
@@ -882,6 +889,7 @@ contract Goo is TRC20 {
                 emit PlayerAttacked(msg.sender, target, true, stealingPower);
             } else {
                 emit PlayerAttacked(msg.sender, target, true, balanceOf(target));
+                roughSupply += balanceOfUnclaimedGoo(target);
                 gooBalance[msg.sender] += balanceOf(target);
                 gooBalance[target] = 0;
             }
@@ -955,9 +963,12 @@ contract Goo is TRC20 {
         return (amount * (schema.unitStealingCapacity(unitId) + unitGooStealingIncreases[player][unitId]) * (10 + unitGooStealingMultiplier[player][unitId])) / 10;
     }
     
+    function getPlayerRefs(address player) public view returns (uint) {
+        return playerRefList[player].length;
+    }
     
     // To display on website
-    function getGameInfo() external constant returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256[], bool[]){
+    function getGameInfo() external constant returns (uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256[], bool[], uint256){
         uint256[] memory units = new uint256[](schema.getCurrentNumberOfUnits());
         bool[] memory upgrades = new bool[](schema.getCurrentNumberOfUpgrades());
         
@@ -989,7 +1000,7 @@ contract Goo is TRC20 {
         }
         
         return (block.timestamp, totalTronGooResearchPool, totalGooProduction, totalGooDepositSnapshots[totalGooDepositSnapshots.length - 1],  gooDepositSnapshots[msg.sender][totalGooDepositSnapshots.length - 1],
-        nextSnapshotTime, balanceOf(msg.sender), tronBalance[msg.sender], getGooProduction(msg.sender), units, upgrades);
+        nextSnapshotTime, balanceOf(msg.sender), getGooProduction(msg.sender), units, upgrades, nextGooDepositSnapshotTime);
     }
     
     // To display on website

@@ -6,7 +6,7 @@ contract GooGameConfig {
     mapping(uint256 => Upgrade) private upgradeInfo;
     mapping(uint256 => Rare) private rareInfo;
 
-    uint256 public currentNumberOfUnits = 16;
+    uint256 public currentNumberOfUnits = 17;
     uint256 public currentNumberOfUpgrades = 477; 
     uint256 public currentNumberOfRares = 2;
 
@@ -60,17 +60,17 @@ contract GooGameConfig {
         unitInfo[4] = Unit(4, 200, 100, 0, 10, 0, 0, 0, true);
         unitInfo[5] = Unit(5, 500, 250, 0, 20, 0, 0, 0, true);
         unitInfo[6] = Unit(6, 1000, 500, 0, 40, 0, 0, 0, true);
-        unitInfo[7] = Unit(7, 0, 1000, 500 trx, 5000, 0, 0, 0, true);
+        unitInfo[7] = Unit(7, 0, 0, 500 trx, 5000, 0, 0, 0, true);
         unitInfo[8] = Unit(8, 1500, 750, 0, 60, 0, 0, 0, true);
         unitInfo[9] = Unit(9, 0, 0, 100000 trx, 500000, 0, 0, 0, false); // First secret rare unit from raffle (unsellable)
 
-        unitInfo[40] = Unit(40, 50, 25, 0, 0, 10, 10, 10000, true);
-        unitInfo[41] = Unit(41, 100, 50, 0, 0, 1, 25, 500, true);
-        unitInfo[42] = Unit(42, 0, 0, 100 trx, 0, 200, 10, 50000, true);
-        unitInfo[43] = Unit(43, 250, 125, 0, 0, 25, 1, 15000, true);
-        unitInfo[44] = Unit(44, 500, 250, 0, 0, 20, 40, 5000, true);
-        unitInfo[45] = Unit(45, 0, 2500, 200 trx, 0, 0, 0, 100000, true);
-        //unitInfo[46] = Unit(46, 750, 375, 0, 0, 40, 20, 60000, true); CENTURION
+        unitInfo[40] = Unit(40, 50, 25, 0, 0, 10, 10, 1000, true);
+        unitInfo[41] = Unit(41, 100, 50, 0, 0, 1, 25, 50, true);
+        unitInfo[42] = Unit(42, 0, 0, 100 trx, 0, 200, 10, 5000, true);
+        unitInfo[43] = Unit(43, 250, 125, 0, 0, 25, 1, 1500, true);
+        unitInfo[44] = Unit(44, 500, 250, 0, 0, 20, 40, 500, true);
+        unitInfo[45] = Unit(45, 0, 0, 200 trx, 0, 0, 0, 10000, true);
+        //unitInfo[46] = Unit(46, 750, 375, 0, 0, 40, 20, 6000, true); CENTURION
         unitInfo[47] = Unit(47, 0, 0, 100000 trx, 0, 20000, 10000, 10000000, false); // Second secret rare unit from raffle (unsellable)
     }
 
